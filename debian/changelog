@@ -1,0 +1,5 @@
+srain (1.3.0-1) UNRELEASED; urgency=medium
+
+  * Initial release (Closes: #995142)
+
+ -- Anuradha Weeraman <anuradha@debian.org>  Fri, 01 Oct 2021 18:10:53 +0530

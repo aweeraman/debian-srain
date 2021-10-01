@@ -1,0 +1,19 @@
+Source: srain
+Section: unknown
+Priority: optional
+Maintainer: Anuradha Weeraman <anuradha@debian.org>
+Build-Depends: debhelper-compat (= 13),
+	       meson,
+	       ninja-build,
+	       libgtk-3-dev, libconfig-dev, libsoup2.4-dev, libssl-dev, libsecret-1-dev, python3-sphinx-rst-builder
+Standards-Version: 4.6.0
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Browser: https://salsa.debian.org/debian/srain
+#Vcs-Git: https://salsa.debian.org/debian/srain.git
+Rules-Requires-Root: no
+
+Package: srain
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
