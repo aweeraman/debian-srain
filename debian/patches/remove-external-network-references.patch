@@ -37,3 +37,18 @@ index e988fff..9edf907 100644
  Features
  ========
  
+diff --git a/doc/install.rst b/doc/install.rst
+index c240682..dad1d86 100644
+--- a/doc/install.rst
++++ b/doc/install.rst
+@@ -187,10 +187,6 @@ Srain now in `offical repository of fedora`_, use ``dnf`` to install it.
+ Flatpak
+ ~~~~~~~
+ 
+-.. image:: https://flathub.org/assets/badges/flathub-badge-i-en.svg
+-   :width: 240
+-   :target: https://flathub.org/apps/details/im.srain.Srain
+-
+ `cpba`_ is maintaining `Flatpak manifest for Srain`_ and The built package is
+ available on `Flathub`_, just execute the following commands to install if
+ you already have flatpak installed:
