@@ -4,3 +4,8 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
 	dh $@ --buildsystem=meson --with=sphinxdoc
+
+override_dh_installdocs:
+	dh_installdocs
+	dh_sphinxdoc
+	rm debian/srain/usr/share/doc/srain/html/.nojekyll
