@@ -1,3 +1,13 @@
+Description: Suppress man page generation and the location of .doctrees
+ The sphinx generated man page is not in the right format. Suppress
+ generating the man page and including one specifically for Debian in
+ the package. In addition, changed the location where the .doctrees are
+ getting generated to prevent them from automatically being included in
+ the package.
+Author: Anuradha Weeraman <anuradha@debian.org>
+Last-Update: 2020-10-04
+Forwarded: not-needed
+
 diff --git a/doc/meson.build b/doc/meson.build
 index f261344..8053b0b 100644
 --- a/doc/meson.build

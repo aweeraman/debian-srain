@@ -1,3 +1,10 @@
+Description: Lintian warnings due to external HTTP calls
+ Removed external image references to prevent possible privacy concerns
+ as highlighted by Lintian.
+Author: Anuradha Weeraman <anuradha@debian.org>
+Last-Update: 2020-10-04
+Forwarded: not-needed
+
 diff --git a/README.rst b/README.rst
 index e988fff..9edf907 100644
 --- a/README.rst
