@@ -20,5 +20,20 @@ Rules-Requires-Root: no
 Package: srain
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${sphinxdoc:Depends}
-Description: graphical IRC client
- Srain is a modern IRC client with a GTK+ GUI.
+Description: graphical IRC client based on GTK+
+ Srain is a modern IRC client with a GTK+ GUI that is:
+   * Fully open source
+   * RFC 1459, 2812 compatible
+   * Partial IRCv3 support
+   * Multi-platform support (Linux, Windows, macOS and BSD)
+ Capabilities of a modern graphical IRC client:
+   * Convenient connection panel
+   * Interactive channel search
+   * Forward message in one click
+   * URL preview
+   * Desktop notification
+   * Special optimization for bridge/relay bot
+ Power-user capabilities:
+   * Anything can be done via commands
+   * Fine-grained configuration with hot update support
+   * Regex based message render and filter mechanisms
