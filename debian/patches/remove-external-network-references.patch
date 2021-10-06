@@ -5,8 +5,6 @@ Author: Anuradha Weeraman <anuradha@debian.org>
 Last-Update: 2020-10-04
 Forwarded: not-needed
 
-diff --git a/README.rst b/README.rst
-index e988fff..9edf907 100644
 --- a/README.rst
 +++ b/README.rst
 @@ -2,17 +2,6 @@

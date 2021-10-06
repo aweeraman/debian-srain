@@ -1,0 +1,16 @@
+Description: Set exit-on-close to true by default
+Author: Anuradha Weeraman <anuradha@debian.org>
+Last-Update: 2020-10-06
+Forwarded: not-needed
+
+--- a/data/builtin.cfg
++++ b/data/builtin.cfg
+@@ -7,7 +7,7 @@ version = "1.0.0rc5"        # String; Every configuration file should have a
+ theme = "default-bubble"    # String; Theme; Available values: default
+ csd = true                  # Bool; Whether enable Client-Side Decoration
+ send-on-ctrl-enter = false  # Bool; Send messsage on CTRL+Enter pressed
+-exit-on-close = false       # Bool; Exit program on main window closed
++exit-on-close = true        # Bool; Exit program on main window closed
+ auto-connect = []           # String array; Servers that are auto connected
+                             # after startup
+ 
