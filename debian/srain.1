@@ -1,56 +1,47 @@
-.\"                                      Hey, EMACS: -*- nroff -*-
 .\" (C) Copyright 2021 Anuradha Weeraman <anuradha@debian.org>,
-.\"
-.\" First parameter, NAME, should be all caps
-.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
-.\" other parameters are allowed: see man(7), man(1)
-.TH Srain 1 "October  1 2021"
-.\" Please adjust this date whenever revising the manpage.
-.\"
-.\" Some roff macros, for reference:
-.\" .nh        disable hyphenation
-.\" .hy        enable hyphenation
-.\" .ad l      left justify
-.\" .ad b      justify to both left and right margins
-.\" .nf        disable filling
-.\" .fi        enable filling
-.\" .br        insert line break
-.\" .sp <n>    insert n+1 empty lines
-.\" for manpage-specific macros, see man(7)
+.TH SRAIN 1 "October  1 2021"
 .SH NAME
-srain \- program to do something
+srain \- graphical IRC client based on GTK+
 .SH SYNOPSIS
 .B srain
-.RI [ options ] " files" ...
-.br
-.B bar
-.RI [ options ] " files" ...
+[\fI\,OPTIONS\/\fR]... [\fI\,URL\/\fR]...
 .SH DESCRIPTION
-This manual page documents briefly the
-.B srain
-and
-.B bar
-commands.
-.PP
-.\" TeX users may be more comfortable with the \fB<whatever>\fP and
-.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
-.\" respectively.
-\fBsrain\fP is a program that...
+.B Srain
+is a modern IRC client that is based on a GTK+ GUI.
 .SH OPTIONS
-These programs follow the usual GNU command line syntax, with long
-options starting with two dashes (`-').
-A summary of options is included below.
-For a complete description, see the Info files.
+.PP
+.B Help Options:
 .TP
 .B \-h, \-\-help
-Show summary of options.
+Show help options
+.TP
+.B \-\-help\-all
+Show all help options
+.TP
+.B \-\-help\-gapplication
+Show GApplication options
+.TP
+.B \-\-help\-gtk
+Show GTK+ Options
+.PP
+.B Application Options:
 .TP
 .B \-v, \-\-version
-Show version of program.
-.SH SEE ALSO
-.BR bar (1),
-.BR baz (1).
-.br
-The programs are documented fully by
-.IR "The Rise and Fall of a Fooish Bar" ,
-available via the Info system.
+Show version information
+.TP
+.B \-a, \-\-no\-auto
+Don't auto connect to servers
+.TP
+.B \-\-display=DISPLAY
+X display to use
+.SH FILES
+.PP
+.TP
+.B /etc/srain/builtin.cfg
+System-wide configuration file
+.TP
+.B ~/.config/srain/srain.cfg
+User-specific overrides of the configuration
+.SH COPYRIGHT
+.PP
+2021, Shengyu Zhang. Licensed under GPL-3+ with OpenSSL exception.
