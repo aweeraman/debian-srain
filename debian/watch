@@ -1,3 +1,3 @@
 version=4
-opts="filenamemangle=s/.+\/v?(\d\S+)\.tar\.gz/srain-$1\.tar\.gz/" \
+opts="filenamemangle=s/.+\/v?(\d\S+)\.tar\.gz/srain_$1\.tar\.gz/" \
   https://github.com/SrainApp/srain/tags .*/v?(\d\S+)\.tar\.gz
