@@ -44,6 +44,8 @@
 static gboolean do_period_ping(gpointer user_data);
 static void add_numeric_error_message(SrnChat *chat, int event, const char
         *origin, const char **params, int count);
+static void rejoin_all_channels(SrnServer *srv);
+static gboolean rejoin_all_channels_cb(gpointer user_data);
 
 static void irc_event_connect(SircSession *sirc, const char *event);
 static void irc_event_connect_fail(SircSession *sirc, const char *event,
@@ -312,7 +314,6 @@ static void irc_event_welcome(SircSession *sirc, int event,
     bool try_login;
     bool nick_match;
     const char *nick ;
-    GList *list;
     SrnServer *srv;
 
     g_return_if_fail(count >= 1);
@@ -376,21 +377,18 @@ static void irc_event_welcome(SircSession *sirc, int event,
             srn_chat_add_misc_message_fmt(srv->chat,
                     _("Logging in with %1$s..."),
                     srn_login_method_to_string(srv->cfg->user->login->method));
+            // Rejoin after 8s, We hope to complete the auth within it
+            g_timeout_add(8 * 1000, rejoin_all_channels_cb, srv);
+            return;
         } else {
             srn_chat_add_error_message(srv->chat,
                     _("The assigned nickname does not match the requested nickname, login skipped"));
         }
     }
 
-    /* Join all channels already exists */
-    list = srv->chat_list;
-    while (list){
-        SrnChat *chat = list->data;
-        if (sirc_target_is_channel(srv->irc, chat->name)){
-            sirc_cmd_join(srv->irc, chat->name, chat->cfg->password);
-        }
-        list = g_list_next(list);
-    }
+    // Rejoin channels immediately when no need to do NICKSERV login now.
+    // If have login via other method, it doesn't matter, auth should finished now.
+    rejoin_all_channels(srv);
 }
 
 static void irc_event_nick(SircSession *sirc, const char *event,
@@ -557,6 +555,7 @@ static void irc_event_mode(SircSession *sirc, const char *event,
     GString *modes;
     SrnServer *srv;
     SrnChat *chat;
+    SrnServerUser *srv_user;
     SrnChatUser *chat_user;
 
     g_return_if_fail(count >= 1);
@@ -566,7 +565,10 @@ static void irc_event_mode(SircSession *sirc, const char *event,
     g_return_if_fail(srn_server_is_valid(srv));
     chat = srn_server_get_chat(srv, chan);
     g_return_if_fail(chat);
-    chat_user = srn_chat_get_user(chat, origin);
+
+    srv_user = srn_server_add_and_get_user(srv, origin);
+    g_return_if_fail(srv_user);
+    chat_user = srn_chat_add_and_get_user(chat, srv_user);
     g_return_if_fail(chat_user);
 
     modes = g_string_new(NULL);
@@ -699,6 +701,7 @@ static void irc_event_kick(SircSession *sirc, const char *event,
     const char *reason;
     SrnServer *srv;
     SrnChat *chat;
+    SrnServerUser *srv_user;
     SrnChatUser *kick_chat_user;
     SrnChatUser *kicked_chat_user;
 
@@ -711,7 +714,9 @@ static void irc_event_kick(SircSession *sirc, const char *event,
     g_return_if_fail(srn_server_is_valid(srv));
     chat = srn_server_get_chat(srv, chan);
     g_return_if_fail(chat);
-    kick_chat_user = srn_chat_get_user(chat, origin);
+    srv_user = srn_server_add_and_get_user(srv, origin);
+    g_return_if_fail(srv_user);
+    kick_chat_user = srn_chat_add_and_get_user(chat, srv_user);
     g_return_if_fail(kick_chat_user);
     kicked_chat_user = srn_chat_get_user(chat, kicked);
     g_return_if_fail(kicked_chat_user);
@@ -746,6 +751,7 @@ static void irc_event_channel(SircSession *sirc, const char *event,
     const char *msg;
     SrnServer *srv;
     SrnChat *chat;
+    SrnServerUser *srv_user;
     SrnChatUser *chat_user;
 
     g_return_if_fail(count >= 2);
@@ -756,7 +762,10 @@ static void irc_event_channel(SircSession *sirc, const char *event,
     g_return_if_fail(srn_server_is_valid(srv));
     chat = srn_server_get_chat(srv, chan);
     g_return_if_fail(chat);
-    chat_user = srn_chat_get_user(chat, origin);
+
+    srv_user = srn_server_add_and_get_user(srv, origin);
+    g_return_if_fail(srv_user);
+    chat_user = srn_chat_add_and_get_user(chat, srv_user);
     g_return_if_fail(chat_user);
 
     srn_chat_add_recv_message(chat, chat_user, msg);
@@ -830,6 +839,7 @@ static void irc_event_channel_notice(SircSession *sirc, const char *event,
     const char *msg;
     SrnServer *srv;
     SrnChat *chat;
+    SrnServerUser *srv_user;
     SrnChatUser *chat_user;
 
     g_return_if_fail(count >= 2);
@@ -840,7 +850,10 @@ static void irc_event_channel_notice(SircSession *sirc, const char *event,
     g_return_if_fail(srn_server_is_valid(srv));
     chat = srn_server_get_chat(srv, chan);
     g_return_if_fail(chat);
-    chat_user = srn_chat_get_user(chat, origin);
+
+    srv_user = srn_server_add_and_get_user(srv, origin);
+    g_return_if_fail(srv_user);
+    chat_user = srn_chat_add_and_get_user(chat, srv_user);
     g_return_if_fail(chat_user);
 
     srn_chat_add_notice_message(chat, chat_user, msg);
@@ -1989,4 +2002,28 @@ static void add_numeric_error_message(SrnChat *chat, int event, const char
     srn_chat_add_error_message_fmt(chat, _("ERROR[%1$3d] %2$s"), event, buf->str);
 
     g_string_free(buf, TRUE);
+}
+
+/**
+ * @brief Rejoin all channels already exist
+ */
+static void rejoin_all_channels(SrnServer *srv) {
+    DBG_FR("Rejoining all channels already exist....");
+
+    GList *list = srv->chat_list;
+    while (list){
+        SrnChat *chat = list->data;
+        if (sirc_target_is_channel(srv->irc, chat->name)){
+            sirc_cmd_join(srv->irc, chat->name, chat->cfg->password);
+        }
+        list = g_list_next(list);
+    }
+}
+
+/**
+ * @brief Timer callback wrapper for rejoin_all_channels.
+ */
+static gboolean rejoin_all_channels_cb(gpointer user_data) {
+    rejoin_all_channels(user_data);
+    return G_SOURCE_REMOVE;
 }
