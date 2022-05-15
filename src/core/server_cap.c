@@ -55,7 +55,7 @@ static ServerCapSupport supported_caps[] = {
     //     .offset = offsetof(EnabledCap, identify_msg),
     // },
 
-    // /* IRCv3.1 */
+    // /* IRCv3 */
     // {
     //     .name = "multi-prefix",
     //     .offset = offsetof(EnabledCap, mulit_prefix),
@@ -78,12 +78,14 @@ static ServerCapSupport supported_caps[] = {
         .is_support = sasl_is_support,
         .on_enable = sasl_on_enable,
     },
-
-    // /* IRCv3.2 */
-    // {
-    //     .name = "server-time",
-    //     .offset = offsetof(EnabledCap, server_time),
-    // },
+    {
+        .name = "message-tags",
+        .offset = offsetof(EnabledCap, message_tags),
+    },
+    {
+        .name = "server-time",
+        .offset = offsetof(EnabledCap, server_time),
+    },
     // {
     //     .name = "userhost-in-names",
     //     .offset = offsetof(EnabledCap, userhost_in_names),
@@ -97,6 +99,10 @@ static ServerCapSupport supported_caps[] = {
     //     .name = "chghost",
     //     .offset = offsetof(EnabledCap, chghost),
     // },
+    {
+        .name = "invite-notify",
+        .offset = offsetof(EnabledCap, invite_notify),
+    },
 
     // /* ZNC */
     // {
@@ -254,6 +260,7 @@ static void sasl_on_enable(SrnServerCap *scap, const char *name){
     switch (srv->cfg->user->login->method){
         case SRN_LOGIN_METHOD_SASL_PLAIN:
         case SRN_LOGIN_METHOD_SASL_ECDSA_NIST256P_CHALLENGE:
+        case SRN_LOGIN_METHOD_SASL_EXTERNAL:
             break;
         default:
             return;
@@ -271,6 +278,9 @@ static void sasl_on_enable(SrnServerCap *scap, const char *name){
             break;
         case SRN_LOGIN_METHOD_SASL_ECDSA_NIST256P_CHALLENGE:
             sirc_cmd_authenticate(srv->irc, "ECDSA-NIST256P-CHALLENGE");
+            break;
+        case SRN_LOGIN_METHOD_SASL_EXTERNAL:
+            sirc_cmd_authenticate(srv->irc, "EXTERNAL");
             break;
         default:
             g_warn_if_reached();

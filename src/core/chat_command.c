@@ -586,7 +586,9 @@ SrnRet on_command_me(SrnCommand *cmd, void *user_data){
         return RET_ERR(_("Failed to send action message: %1$s"), RET_MSG(ret));
     }
 
-    srn_chat_add_action_message(chat, chat->user, msg);
+    g_autoptr(SircMessageContext) context = sirc_message_context_new(NULL);
+
+    srn_chat_add_action_message(chat, chat->user, msg, context);
 
     return SRN_OK;
 }
@@ -899,6 +901,17 @@ SrnRet on_command_quote(SrnCommand *cmd, void *user_data){
     g_return_val_if_fail(msg, SRN_ERR);
 
     return sirc_cmd_raw(srv->irc, "%s\r\n", msg);
+}
+
+SrnRet on_command_clear(SrnCommand *cmd, void *user_data){
+    SrnChat *chat;
+
+    chat = ctx_get_chat(user_data);
+    g_return_val_if_fail(chat, SRN_ERR);
+
+    sui_buffer_clear_message(chat->ui);
+
+    return SRN_OK;
 }
 
 /*******************************************************************************

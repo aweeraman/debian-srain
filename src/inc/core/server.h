@@ -129,6 +129,7 @@ enum _SrnLoginMethod {
     SRN_LOGIN_METHOD_MSG_NICKSERV,
     SRN_LOGIN_METHOD_SASL_PLAIN,
     SRN_LOGIN_METHOD_SASL_ECDSA_NIST256P_CHALLENGE,
+    SRN_LOGIN_METHOD_SASL_EXTERNAL,
     SRN_LOGIN_METHOD_UNKNOWN,
 };
 
@@ -171,19 +172,19 @@ struct _SrnServerConfig {
 };
 
 struct _EnabledCap {
-    // Version 3.1
+    // IRCv3
     bool identify_msg;
     bool mulit_prefix;
     bool away_notify;
     bool account_notify;
     bool extended_join;
     bool sasl;
-
-    // Version 3.2
+    bool message_tags;
     bool server_time;
     bool userhost_in_names;
     bool cap_notify;
     bool chghost;
+    bool invite_notify;
 
     // Vendor-Specific
     bool znc_server_time_iso;
