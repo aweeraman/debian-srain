@@ -3,21 +3,21 @@ on:
   release:
     types: [created]
 jobs:
-  debiab-buster:
-    runs-on: ubuntu-latest
-    container: debian:buster
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GH_REPO: ${{ github.repository }}
-      GH_REF: ${{ github.ref }}
-    steps:
-    - name: upgrade the packages
-      run: apt-get update && apt-get upgrade -y && apt-get install -y git
-    - uses: actions/checkout@v2
-    - name: build
-      run: .github/workflows/release-debian-package.sh
-    - name: upload the assets
-      run: .github/workflows/release-assets-upload.py
+  # debiab-buster:
+  #   runs-on: ubuntu-latest
+  #   container: debian:buster
+  #   env:
+  #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     GH_REPO: ${{ github.repository }}
+  #     GH_REF: ${{ github.ref }}
+  #   steps:
+  #   - name: upgrade the packages
+  #     run: apt-get update && apt-get upgrade -y && apt-get install -y git
+  #   - uses: actions/checkout@v2
+  #   - name: build
+  #     run: .github/workflows/release-debian-package.sh
+  #   - name: upload the assets
+  #     run: .github/workflows/release-assets-upload.py
   mingw64:
     runs-on: windows-latest
     defaults:
@@ -41,7 +41,7 @@ jobs:
         INSTALL_DIR=srain-$SRAIN_TAG-mingw64-install;
         PACKAGE_DIR=srain-$SRAIN_TAG-mingw64;
         PACKAGE_NAME=$PACKAGE_DIR.zip;
-        PREFIX=a/_temp/msys/msys64/mingw64; # Hardcoded meson prefix
+        PREFIX=a/_temp/msys64/mingw64; # Hardcoded meson prefix
         mkdir -pv out;
         mkdir -pv $INSTALL_DIR;
         meson setup -Ddoc_builders=[] \

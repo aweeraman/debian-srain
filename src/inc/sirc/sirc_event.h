@@ -22,13 +22,16 @@
 	#error This file should not be included directly, include just sirc.h
 #endif
 
-typedef void (*SircSimpleEventCallback) (SircSession *sirc, const char *event);
+typedef void (*SircSimpleEventCallback) (SircSession *sirc, const char *event,
+        const SircMessageContext *context);
 
 typedef void (*SircEventCallback) (SircSession *sirc, const char *event,
-        const char *origin, const char *params[], int count);
+        const char *origin, const char *params[], int count,
+        const SircMessageContext *context);
 
 typedef void (*SircNumericEventCallback) (SircSession *sirc, int event,
-        const char *origin, const char *params[], int count);
+        const char *origin, const char *params[], int count,
+        const SircMessageContext *context);
 
 typedef struct {
     SircSimpleEventCallback     connect;
@@ -47,6 +50,7 @@ typedef struct {
     SircEventCallback           channel;
     SircEventCallback           privmsg;
     SircEventCallback           notice;
+    SircEventCallback           tagmsg;
     SircEventCallback           channel_notice;
     SircEventCallback           invite;
     SircEventCallback           ctcp_req;
@@ -56,6 +60,9 @@ typedef struct {
     SircEventCallback           ping;
     SircEventCallback           pong;
     SircEventCallback           error;
+    SircEventCallback           fail;
+    SircEventCallback           warn;
+    SircEventCallback           note;
     SircEventCallback           unknown;
 
     SircNumericEventCallback    numeric;
