@@ -13,4 +13,4 @@ Forwarded: not-needed
 +exit-on-close = true        # Bool; Exit program on main window closed
  auto-connect = []           # String array; Servers that are auto connected
                              # after startup
- 
+ server-visibility = true    # Bool; Whether the server buffer is visible
