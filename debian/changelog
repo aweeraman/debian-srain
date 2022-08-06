@@ -1,3 +1,9 @@
+srain (1.4.1-1) unstable; urgency=medium
+
+  * New upstream version. 
+
+ -- Anuradha Weeraman <anuradha@debian.org>  Sat, 06 Aug 2022 22:37:31 +0530
+
 srain (1.4.0-1) unstable; urgency=medium
 
   * New upstream version. 
