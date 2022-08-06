@@ -7,29 +7,24 @@ Forwarded: not-needed
 
 --- a/README.rst
 +++ b/README.rst
-@@ -2,17 +2,6 @@
+@@ -2,29 +2,8 @@
  Srain
  =====
  
--|ci-status| |doc-status| |channel|
+-|ci-status| |docs-status| |channel|
 -
 -.. |ci-status| image:: https://github.com/SrainApp/srain/workflows/build/badge.svg?branch=master
 -   :target: https://github.com/SrainApp/srain/actions
 -
--.. |doc-status| image:: https://readthedocs.org/projects/srain/badge/?version=latest
--    :target: https://doc.srain.im/en/latest/
+-.. |docs-status| image:: https://github.com/SrainApp/srain/actions/workflows/pages.yml/badge.svg
+-    :target: https://srain.silverrainz.me/
 -
 -.. |channel| image:: https://img.shields.io/badge/channel-%23srain-brightgreen.svg
 -   :target: ircs://irc.libera.chat/#srain
 -
  Modern IRC client written in GTK.
  
- `Home`_ | `Documentation`_ | `Source code`_
-@@ -21,16 +10,6 @@ Modern IRC client written in GTK.
- .. _Documentation: https://doc.srain.im
- .. _Source code: https://github.com/SrainApp/srain
- 
--.. image:: https://srain.im/assets/images/cover.png
+-.. image:: https://srain.silverrainz.me/_images/main.png
 -
 -Packaging Status
 -================
@@ -42,11 +37,27 @@ Forwarded: not-needed
  Features
  ========
  
-diff --git a/doc/install.rst b/doc/install.rst
-index c240682..dad1d86 100644
---- a/doc/install.rst
-+++ b/doc/install.rst
-@@ -187,10 +187,6 @@ Srain now in `offical repository of fedora`_, use ``dnf`` to install it.
+@@ -49,8 +28,6 @@ Features
+   - Regex based message render and filter mechanisms
+   - IPC based plugin system (TODO)
+ 
+-.. _IRCv3: https://ircv3.net/
+-
+ Need Help?
+ ==========
+ 
+@@ -61,8 +38,6 @@ Feel free to contact us if you have any question about Srain.
+ - IRC Channel: `#srain <ircs://irc.libera.chat/srain>`_ @ Libera Chat
+ - Github: file an issue `Here <https://github.com/SrainApp/srain/issues>`_
+ 
+-.. _Frequently Asked Questions: https://srain.silverrainz.me/faq.html
+-
+ License
+ =======
+ 
+--- a/docs/install.rst
++++ b/docs/install.rst
+@@ -167,10 +167,6 @@ Srain now in `offical repository of fedora`_, use ``dnf`` to install it.
  Flatpak
  ~~~~~~~
  
