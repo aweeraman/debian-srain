@@ -12,7 +12,7 @@ Build-Depends: debhelper-compat (= 13),
 	       libsecret-1-dev,
 	       python3-sphinx
 Standards-Version: 4.6.0
-Homepage: https://srain.im
+Homepage: https://srain.silverrainz.me/
 Vcs-Browser: https://salsa.debian.org/debian/srain
 Vcs-Git: https://salsa.debian.org/debian/srain.git
 Rules-Requires-Root: no
