@@ -1,3 +1,2 @@
-suppress-man-generation.patch
 remove-external-network-references.patch
 set-exit-on-close.patch

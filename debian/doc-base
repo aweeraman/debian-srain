@@ -1,9 +1,0 @@
-Document: srain
-Title: Srain
-Author: Anuradha Weeraman <anuradha@debian.org>
-Abstract: Srain is a modern IRC client with a GTK+ GUI.
-Section: Network/Communication
-
-Format: HTML
-Index: /usr/share/doc/srain/html/index.html
-Files: /usr/share/doc/srain/html/*.html
