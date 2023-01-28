@@ -1,3 +1,9 @@
+srain (1.5.0-2) unstable; urgency=medium
+
+  * Bumped up standards version.
+
+ -- Anuradha Weeraman <anuradha@debian.org>  Sat, 28 Jan 2023 18:05:23 +0530
+
 srain (1.5.0-1) unstable; urgency=medium
 
   * New upstream version. 
