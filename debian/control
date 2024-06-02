@@ -10,7 +10,8 @@ Build-Depends: debhelper-compat (= 13),
 	       libsoup-3.0-dev,
 	       libssl-dev,
 	       libsecret-1-dev,
-	       python3-sphinx
+	       python3-sphinx,
+	       libayatana-appindicator3-dev
 Standards-Version: 4.6.2
 Homepage: https://srain.silverrainz.me/
 Vcs-Browser: https://salsa.debian.org/debian/srain

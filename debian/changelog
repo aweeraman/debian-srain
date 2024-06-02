@@ -2,6 +2,7 @@ srain (1.7.0-1) unstable; urgency=high
 
   * New upstream version.
   * Upgraded to libsoup-3 (Closes: #1070404)
+  * Updated build dependencies.
 
  -- Anuradha Weeraman <anuradha@debian.org>  Sun, 02 Jun 2024 18:19:07 +0530
 
