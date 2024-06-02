@@ -2,7 +2,7 @@ Description: Lintian warnings due to external HTTP calls
  Removed external image references to prevent possible privacy concerns
  as highlighted by Lintian.
 Author: Anuradha Weeraman <anuradha@debian.org>
-Last-Update: 2020-10-04
+Last-Update: 2024-06-02
 Forwarded: not-needed
 
 --- a/README.rst
@@ -31,40 +31,31 @@ Forwarded: not-needed
 -
 -|pkgstat|
 -
--.. |pkgstat| image:: https://repology.org/badge/vertical-allrepos/srain.svg
+-.. |pkgstat| image:: https://repology.org/badge/vertical-allrepos/srain.svg?columns=3
 -   :target: https://repology.org/project/srain/versions
 -
  Features
  ========
  
-@@ -49,8 +28,6 @@ Features
+@@ -49,21 +28,6 @@ Features
    - Regex based message render and filter mechanisms
    - IPC based plugin system (TODO)
  
 -.. _IRCv3: https://ircv3.net/
 -
- Need Help?
- ==========
- 
-@@ -61,8 +38,6 @@ Feel free to contact us if you have any question about Srain.
- - IRC Channel: `#srain <ircs://irc.libera.chat/srain>`_ @ Libera Chat
- - Github: file an issue `Here <https://github.com/SrainApp/srain/issues>`_
- 
+-Need Help?
+-==========
+-
+-`Frequently Asked Questions`_ may be helpful.
+-
+-Feel free to contact us if you have any question about Srain.
+-
+-- Github: file an issue `Here <https://github.com/SrainApp/srain/issues>`_
+-- IRC Channel: I'm no longer active on IRC, but you can still ask other users
+-  for help on `#srain <ircs://irc.libera.chat/srain>`_ @ Libera Chat
+-
 -.. _Frequently Asked Questions: https://srain.silverrainz.me/faq.html
 -
  License
  =======
  
---- a/docs/install.rst
-+++ b/docs/install.rst
-@@ -167,10 +167,6 @@ Srain now in `offical repository of fedora`_, use ``dnf`` to install it.
- Flatpak
- ~~~~~~~
- 
--.. image:: https://flathub.org/assets/badges/flathub-badge-i-en.svg
--   :width: 240
--   :target: https://flathub.org/apps/details/im.srain.Srain
--
- `cpba`_ is maintaining `Flatpak manifest for Srain`_ and The built package is
- available on `Flathub`_, just execute the following commands to install if
- you already have flatpak installed:
