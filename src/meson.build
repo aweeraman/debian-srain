@@ -11,9 +11,13 @@ meta_h.set_quoted('PACKAGE_WEBSITE', app_url)
 meta_h.set_quoted('PACKAGE_BUGREPORT', app_bugreport)
 meta_h.set_quoted('PACKAGE_AUTHOR', 'Shengyu Zhang')
 meta_h.set_quoted('PACKAGE_EMAIL', 'i@silverrainz.me')
-meta_h.set_quoted('PACKAGE_COPYRIGHT_DATES', '2016 - 2023')
+meta_h.set_quoted('PACKAGE_COPYRIGHT_DATES', '2016 - 2024')
 meta_h.set_quoted('PACKAGE_DATA_DIR', data_dir)
 meta_h.set_quoted('PACKAGE_CONFIG_DIR', sys_conf_dir)
+
+if get_option('app_indicator')
+  meta_h.set('ENABLE_APP_INDICATOR', 1)
+endif
 
 build_id_generator = [
   join_paths(meson.source_root() , 'script', 'gen-build-id.sh'),
@@ -118,11 +122,15 @@ deps = [
   dependency('gtk+-3.0', version: '>= 3.22.15'),
   dependency('glib-2.0', version: '>= 2.39.3'),
   dependency('libconfig', version: '>= 1.5'),
-  dependency('libsoup-2.4'),
+  dependency('libsoup-3.0'),
   dependency('openssl'),
   dependency('libsecret-1'),
   generated_meta_h,
 ]
+
+if get_option('app_indicator')
+  deps += [dependency('ayatana-appindicator3-0.1')]
+endif
 
 incdirs = [
   include_directories('inc'),

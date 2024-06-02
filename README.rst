@@ -22,7 +22,7 @@ Packaging Status
 
 |pkgstat|
 
-.. |pkgstat| image:: https://repology.org/badge/vertical-allrepos/srain.svg
+.. |pkgstat| image:: https://repology.org/badge/vertical-allrepos/srain.svg?columns=3
    :target: https://repology.org/project/srain/versions
 
 Features
@@ -58,8 +58,9 @@ Need Help?
 
 Feel free to contact us if you have any question about Srain.
 
-- IRC Channel: `#srain <ircs://irc.libera.chat/srain>`_ @ Libera Chat
 - Github: file an issue `Here <https://github.com/SrainApp/srain/issues>`_
+- IRC Channel: I'm no longer active on IRC, but you can still ask other users
+  for help on `#srain <ircs://irc.libera.chat/srain>`_ @ Libera Chat
 
 .. _Frequently Asked Questions: https://srain.silverrainz.me/faq.html
 

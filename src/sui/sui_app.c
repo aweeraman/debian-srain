@@ -24,10 +24,16 @@
  * @date 2016-03-01
  */
 
+#include "meta.h"
+
 #include <gtk/gtk.h>
 
+/* NOTE: Behind meta.h because ENABLE_APP_INDICATOR declared there */
+#ifdef ENABLE_APP_INDICATOR
+#include <libayatana-appindicator/app-indicator.h>
+#endif
+
 #include "sui/sui.h"
-#include "meta.h"
 #include "log.h"
 #include "i18n.h"
 
@@ -38,10 +44,19 @@
 #include "sui_window.h"
 #include "sui_prefs_dialog.h"
 
+// See also $PROJECT_ROOT/data/icons/meson.build.
+#define APP_ICON PACKAGE_APPID
+#define APP_ATTENTION_ICON PACKAGE_APPID ".Red"
+
 struct _SuiApplication {
     GtkApplication parent;
 
+#ifdef ENABLE_APP_INDICATOR
+    AppIndicator *tray_icon;
+#else
     GtkStatusIcon *tray_icon;
+#endif
+
     // GtkPopover can not shown at outside of GtkWindow on X11,
     // so we need another traditional menu as tray icon menu.
     GtkMenu *menu;
@@ -76,17 +91,22 @@ static int on_handle_local_options(SuiApplication *self, GVariantDict *options,
         gpointer user_data);
 static int on_command_line(SuiApplication *self,
         GApplicationCommandLine *cmdline, gpointer user_data);
-static void on_activate_about(GSimpleAction *action, GVariant  *parameter,
+static void on_action_about(GSimpleAction *action, GVariant *parameter,
         gpointer user_data);
-static void on_activate_prefs(GSimpleAction *action, GVariant  *parameter,
+static void on_action_prefs(GSimpleAction *action, GVariant *parameter,
         gpointer user_data);
-static void on_activate_exit(GSimpleAction *action, GVariant  *parameter,
+static void on_action_exit(GSimpleAction *action, GVariant *parameter,
         gpointer user_data);
-static void on_toggle_server_visibility(GSimpleAction *action, GVariant  *parameter,
+static void on_action_toggle_server_visibility(GSimpleAction *action,
+        GVariant *parameter, gpointer user_data);
+static void on_action_activate(GSimpleAction *action, GVariant *parameter,
         gpointer user_data);
+
+#ifndef ENABLE_APP_INDICATOR
 static void tray_icon_on_click(GtkStatusIcon *status_icon, gpointer user_data);
 static void tray_icon_on_popup_menu(GtkStatusIcon *status_icon, guint button,
        guint activate_time, gpointer user_data);
+#endif
 
 /*****************************************************************************
  * GObject functions
@@ -139,19 +159,23 @@ static const GOptionEntry option_entries[] = {
 static const GActionEntry action_entries[] = {
     {
         .name = "about",
-        .activate = on_activate_about,
+        .activate = on_action_about,
     },
     {
         .name = "preferences",
-        .activate = on_activate_prefs,
+        .activate = on_action_prefs,
     },
     {
         .name = "exit",
-        .activate = on_activate_exit,
+        .activate = on_action_exit,
     },
     {
         .name = "toggle-server-visibility",
-        .activate = on_toggle_server_visibility,
+        .activate = on_action_toggle_server_visibility,
+    },
+    {
+        .name = "activate",
+        .activate = on_action_activate,
     },
     { NULL },
 };
@@ -342,8 +366,14 @@ void sui_application_send_notification(SuiApplication *self,
 }
 
 void sui_application_highlight_tray_icon(SuiApplication *self, bool highlight){
+#ifdef ENABLE_APP_INDICATOR
+    // TODO: works on KDE, but doesn't work on waybar.
+    app_indicator_set_status(self->tray_icon, highlight ?
+            APP_INDICATOR_STATUS_ATTENTION : APP_INDICATOR_STATUS_ACTIVE);
+#else
     gtk_status_icon_set_from_icon_name(self->tray_icon,
-            highlight ? "srain-red": PACKAGE);
+            highlight ? APP_ATTENTION_ICON : APP_ICON);
+#endif
 }
 
 SuiApplication* sui_application_get_instance(){
@@ -441,7 +471,7 @@ static void show_about_dialog(SuiApplication *self){
             "comments", PACKAGE_DESC,
             "authors", authors,
             "documenters", documentors,
-            "logo-icon-name", PACKAGE,
+            "logo-icon-name", APP_ICON,
             "title", _("About Srain"),
             "translator-credits", translators,
             NULL);
@@ -452,13 +482,42 @@ static void on_startup(SuiApplication *self){
     GtkBuilder *builder;
 
     builder = gtk_builder_new_from_resource("/im/srain/Srain/app.glade");
-    self->tray_icon = GTK_STATUS_ICON(g_object_ref_sink(
-                gtk_builder_get_object(builder, "tray_icon")));
     self->menu = GTK_MENU(g_object_ref_sink(
             gtk_builder_get_object(builder, "menu")));
     self->popover_menu = GTK_POPOVER_MENU(g_object_ref_sink(
         gtk_builder_get_object(builder, "popover_menu")));
     g_object_unref(builder);
+
+#ifdef ENABLE_APP_INDICATOR
+    self->tray_icon = app_indicator_new(PACKAGE_APPID, APP_ICON,
+            APP_INDICATOR_CATEGORY_COMMUNICATIONS);
+    app_indicator_set_status(self->tray_icon, APP_INDICATOR_STATUS_ACTIVE);
+    app_indicator_set_attention_icon_full(self->tray_icon, APP_ATTENTION_ICON, _("Srain Icon for Attention"));
+    app_indicator_set_menu(self->tray_icon, self->menu);
+    app_indicator_set_title(self->tray_icon, PACKAGE);
+
+    // Show "Activate" menu item because we can not activate application
+    // by left-clicking the app indicator.
+    GList *menu_items;
+    menu_items = gtk_container_get_children(GTK_CONTAINER(self->menu));
+    for (GList *iter = menu_items; iter != NULL; iter = g_list_next(iter)) {
+        GtkWidget *item;
+        const char *name;
+
+        item = GTK_WIDGET(iter->data);
+        name = gtk_widget_get_name(item);
+        if (g_strcmp0(name, "activate_menu_item") == 0) {
+            gtk_widget_set_visible(item, TRUE);
+            break;
+        }
+    }
+    g_list_free(menu_items);
+#else
+    self->tray_icon = gtk_status_icon_new_from_icon_name(PACKAGE_APPID);
+    g_signal_connect(self->tray_icon, "activate", G_CALLBACK(tray_icon_on_click), self);
+    g_signal_connect(self->tray_icon, "popup-menu", G_CALLBACK(tray_icon_on_popup_menu), self);
+    gtk_status_icon_set_tooltip_text(self->tray_icon, PACKAGE);
+#endif
 
     // Attach to any widget to connect to action
     gtk_menu_attach_to_widget(self->menu, GTK_WIDGET(self->popover_menu), NULL);
@@ -466,11 +525,6 @@ static void on_startup(SuiApplication *self){
     // Add resource to icon search path
     gtk_icon_theme_add_resource_path(gtk_icon_theme_get_default(),
             "/im/srain/Srain/icons");
-
-    g_signal_connect(self->tray_icon, "activate",
-            G_CALLBACK(tray_icon_on_click), self);
-    g_signal_connect(self->tray_icon, "popup-menu",
-            G_CALLBACK(tray_icon_on_popup_menu), self);
 
     ret = sui_theme_manager_apply(self->theme, self->cfg->theme);
     if (!RET_IS_OK(ret)){
@@ -542,7 +596,7 @@ static int on_command_line(SuiApplication *self,
     return 0;
 }
 
-static void on_activate_about(GSimpleAction *action, GVariant  *parameter,
+static void on_action_about(GSimpleAction *action, GVariant  *parameter,
         gpointer user_data){
     SuiApplication *self;
 
@@ -550,7 +604,7 @@ static void on_activate_about(GSimpleAction *action, GVariant  *parameter,
     show_about_dialog(self);
 }
 
-static void on_activate_prefs(GSimpleAction *action, GVariant  *parameter,
+static void on_action_prefs(GSimpleAction *action, GVariant  *parameter,
         gpointer user_data){
     SuiApplication *self;
     SuiPrefsDialog *dialog;
@@ -567,7 +621,7 @@ static void on_activate_prefs(GSimpleAction *action, GVariant  *parameter,
     gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
-static void on_activate_exit(GSimpleAction *action, GVariant  *parameter,
+static void on_action_exit(GSimpleAction *action, GVariant  *parameter,
         gpointer user_data){
     SuiApplication *self;
 
@@ -576,7 +630,7 @@ static void on_activate_exit(GSimpleAction *action, GVariant  *parameter,
 }
 
 
-static void on_toggle_server_visibility(GSimpleAction *action, GVariant  *parameter,
+static void on_action_toggle_server_visibility(GSimpleAction *action, GVariant  *parameter,
         gpointer user_data){
     SuiApplication *self;
     SuiWindow *win;
@@ -586,6 +640,15 @@ static void on_toggle_server_visibility(GSimpleAction *action, GVariant  *parame
     sui_window_toggle_server_visibility(win);
 }
 
+static void on_action_activate(GSimpleAction *action, GVariant  *parameter,
+        gpointer user_data){
+    SuiApplication *self;
+
+    self = user_data;
+    g_application_activate(G_APPLICATION(self));
+}
+
+#ifndef ENABLE_APP_INDICATOR
 static void tray_icon_on_click(GtkStatusIcon *status_icon, gpointer user_data){
     GList *wins;
     SuiApplication *self;
@@ -602,10 +665,11 @@ static void tray_icon_on_click(GtkStatusIcon *status_icon, gpointer user_data){
 }
 
 static void tray_icon_on_popup_menu(GtkStatusIcon *status_icon, guint button,
-       guint activate_time, gpointer user_data){
+        guint activate_time, gpointer user_data){
     SuiApplication *self;
 
     self = user_data;
 
     gtk_menu_popup_at_pointer(self->menu, NULL);
 }
+#endif

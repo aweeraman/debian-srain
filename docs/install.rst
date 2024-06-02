@@ -15,26 +15,28 @@ Srain is available on :ref:`install-packages-gnu-linux`,
 Dependencies
 ============
 
-=================== =================================================== ========
-Name                Notes                                               Version
-=================== =================================================== ========
-meson               Only for Building                                   > 0.47.0
-make                Optional, only for development
-appstream           Only for building, on Debian-based distributions
-coreutils           Only for building
-gcc                 Only for building
-pkg-config          Only for building
-gettext             Only for building
+======================== =================================================== ========
+Name                     Notes                                               Version
+======================== =================================================== ========
+meson                    Only for Building                                   > 0.47.0
+make                     Optional, only for development
+appstream                Only for building, on Debian-based distributions
+coreutils                Only for building
+gcc                      Only for building
+pkg-config               Only for building
+gettext                  Only for building
 glib2
-glib-networking     Optional, for TLS connection support
-gtk+3                                                                   >= 3.18
-libsoup
-libconfig                                                               >= 1.5
+glib-networking          Optional, for TLS connection support
+gtk+3                                                                        >= 3.18
+libsoup3                                                                     >= 3.0
+libconfig                                                                    >= 1.5
 libsecret
 openssl
-python-sphinx       Optional, for building documentation
-adwaita-icon-theme  Or other icon themes
-=================== =================================================== ========
+python-sphinx            Optional, for building documentation
+adwaita-icon-theme       Or any other icon themes
+libayatana-appindicator  Optional application indicator support, can be
+                         disabled by meson options ``-Dapp_indicator=false``
+======================== =================================================== ========
 
 .. _install-building:
 

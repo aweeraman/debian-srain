@@ -294,6 +294,8 @@ static SrnRet read_application_config_from_cfg(config_t *cfg,
             &app_cfg->ui->window.exit_on_close);
     config_lookup_bool_ex(cfg, "server-visibility",
             &app_cfg->ui->window.server_visibility);
+    config_lookup_bool_ex(cfg, "scroll-on-new-message",
+            &app_cfg->ui->window.scroll_on_new_message);
 
     /* Read auto connect server list */
     config_setting_t *auto_connect;
@@ -489,6 +491,7 @@ static SrnRet read_server_config_from_cfg(config_t *cfg, SrnServerConfig *srv_cf
 }
 
 static SrnRet read_chat_config_from_chat(config_setting_t *chat, SrnChatConfig *cfg){
+    config_setting_lookup_bool_ex(chat, "log", &cfg->log);
     config_setting_lookup_bool_ex(chat, "notify", &cfg->ui->notify);
     config_setting_lookup_bool_ex(chat, "show-topic", &cfg->ui->show_topic);
     config_setting_lookup_bool_ex(chat, "show-avatar", &cfg->ui->show_avatar);

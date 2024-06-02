@@ -6,6 +6,9 @@
   <project_license>GPL-3.0</project_license>
   <name>@app_pretty_name@</name>
   <summary>@app_desc@</summary>
+  <developer id="me.silverrainz.srain">
+      <name>Shengyu Zhang</name>
+  </developer>
   <update_contact>cpbadosa_AT_gmail.com</update_contact>
   <translation type="gettext">@gettext_package@</translation>
 
@@ -68,6 +71,9 @@
   </content_rating>
 
 <releases>
+  <release version="1.6.0" date="2024-02-11">
+      <url>https://srain.silverrainz.me/changelog.html#version-1-6-0</url>
+  </release>
   <release version="1.5.1" date="2023-03-26">
       <url>https://srain.silverrainz.me/changelog.html#version-1-5-1</url>
   </release>
