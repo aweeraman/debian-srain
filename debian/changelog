@@ -1,3 +1,11 @@
+srain (1.7.0-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Build with -std=gnu17 to workaround FTBFS with GCC 15.
+    (Closes: #1097929)
+
+ -- Adrian Bunk <bunk@debian.org>  Sat, 25 Oct 2025 14:03:11 +0300
+
 srain (1.7.0-1) unstable; urgency=high
 
   * New upstream version.
