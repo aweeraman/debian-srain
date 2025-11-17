@@ -2,11 +2,14 @@
 Miscellaneous
 =============
 
+.. _hot-keys:
+
 Hot Keys
 ========
 
-* :kbd:`ctrl + j/k`: switch chat panel
+* :kbd:`ctrl+j/k`: switch chat panel
 * :kbd:`up/down`: scroll message list
+* :kbd:`ctrl+q`: exit Srain
 
 .. note:: Customized hot keys will be supported in the future.
 
